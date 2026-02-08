@@ -1,27 +1,27 @@
-import { Client, GatewayIntentBits } from "discord.js";
+import { Client, GatewayIntentBits, Events } from "discord.js";
 import "dotenv/config";
 
 const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
-  ]
+  intents: [GatewayIntentBits.Guilds],
 });
 
-client.once("ready", () => {
-  console.log(`Logged in as ${client.user.tag}`);
+client.once(Events.ClientReady, () => {
+  console.log(`✅ Logged in as ${client.user.tag}`);
 });
 
-client.on("messageCreate", (message) => {
-  if (message.author.bot) return;
+client.on(Events.InteractionCreate, async (interaction) => {
+  if (!interaction.isChatInputCommand()) return;
 
-  if (message.content === "ping") {
-    message.reply("pong 🏓");
+  if (interaction.commandName === "ask") {
+    const question = interaction.options.getString("question");
+
+    console.log("📩 Question received:", question);
+
+    await interaction.reply({
+      content: `You asked: **${question}**`,
+      ephemeral: false,
+    });
   }
 });
-
-console.log("Token loaded:", Boolean(process.env.DISCORD_TOKEN));
-console.log("Token length:", process.env.DISCORD_TOKEN?.length);
 
 client.login(process.env.DISCORD_TOKEN);
