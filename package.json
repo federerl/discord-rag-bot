@@ -1,0 +1,26 @@
+{
+  "name": "discord-rag-bot",
+  "version": "1.0.0",
+  "description": "A Discord RAG (Retrieval-Augmented Generation) bot that answers questions using internal documents, with a focus on clean UX, feedback collection, and AI interaction design.",
+  "main": "src/index.js",
+  "scripts": {
+    "start": "node src/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/federerl/discord-rag-bot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/federerl/discord-rag-bot/issues"
+  },
+  "homepage": "https://github.com/federerl/discord-rag-bot#readme",
+  "dependencies": {
+    "discord.js": "^14.25.1",
+    "dotenv": "^17.2.4"
+  }
+}
