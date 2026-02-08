@@ -23,11 +23,43 @@ client.on(Events.InteractionCreate, async (interaction) => {
 
   await interaction.deferReply();
 
-  await new Promise((r) => setTimeout(r, 1200));
+  try {
+  const res = await fetch(`${process.env.BACKEND_API_URL}/ask`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ question }),
+  });
+
+  if (!res.ok) throw new Error("Backend error");
+
+  const data = await res.json();
 
   await interaction.editReply({
-    content: `**Answer (stub):** I received your question:\n> ${question}\n\nNext we will connect this to retrieval + backend API.`,
+    embeds: [
+      {
+        title: "💡 Answer",
+        description: data.answer,
+        color: 0x5865f2,
+        fields: data.sources?.length
+          ? [
+              {
+                name: "📚 Sources",
+                value: data.sources.map(s => `• ${s}`).join("\n"),
+              },
+            ]
+          : [],
+      },
+    ],
   });
+
+  const msg = await interaction.fetchReply();
+  await msg.react("👍");
+  await msg.react("👎");
+
+} catch (err) {
+  console.error(err);
+  await interaction.editReply("❌ Sorry, something went wrong.");
+}
 
   const msg = await interaction.fetchReply();
   await msg.react("👍");
